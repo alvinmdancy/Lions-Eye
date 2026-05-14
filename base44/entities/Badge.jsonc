@@ -1,0 +1,35 @@
+{
+  "name": "Badge",
+  "type": "object",
+  "properties": {
+    "badge_id": {
+      "type": "string",
+      "description": "Unique badge identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Badge display name"
+    },
+    "description": {
+      "type": "string",
+      "description": "How the badge was earned"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Emoji icon for the badge"
+    },
+    "category": {
+      "type": "string",
+      "description": "Badge category (milestone, proficiency, dedication, mastery)"
+    },
+    "earned_at": {
+      "type": "string",
+      "description": "ISO date when earned"
+    }
+  },
+  "required": [
+    "badge_id",
+    "name",
+    "icon"
+  ]
+}

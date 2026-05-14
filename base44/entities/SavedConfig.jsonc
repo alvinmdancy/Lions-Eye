@@ -1,0 +1,65 @@
+{
+  "name": "SavedConfig",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "User-given name for this saved configuration"
+    },
+    "skill": {
+      "type": "string",
+      "description": "The selected skill name"
+    },
+    "category": {
+      "type": "string",
+      "description": "Skill category"
+    },
+    "skill_level": {
+      "type": "string",
+      "description": "Career level (e.g. Junior DevOps)"
+    },
+    "career_label": {
+      "type": "string",
+      "description": "Career label display string"
+    },
+    "prompt_type": {
+      "type": "string",
+      "description": "The prompt type id"
+    },
+    "level": {
+      "type": "string",
+      "description": "Experience level"
+    },
+    "learning_style": {
+      "type": "string",
+      "description": "Learning style preference"
+    },
+    "hours_per_week": {
+      "type": "string",
+      "description": "Hours per week for learning path"
+    },
+    "goal": {
+      "type": "string",
+      "description": "Optional user goal"
+    },
+    "proficiency": {
+      "type": "integer",
+      "description": "Self-assessed confidence level from 1 to 5",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "notes": {
+      "type": "string",
+      "description": "Personal study notes"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "ID of the Project this config belongs to"
+    }
+  },
+  "required": [
+    "name",
+    "skill",
+    "prompt_type"
+  ]
+}
