@@ -8,9 +8,26 @@ export default function PromptOutput({ rawPrompt, aiResponse, isLoading }) {
 
   const handleCopy = () => {
     const text = activeTab === "ai" ? aiResponse : rawPrompt;
-    navigator.clipboard.writeText(text || "");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (!text) return;
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -24,36 +41,29 @@ export default function PromptOutput({ rawPrompt, aiResponse, isLoading }) {
         <div className="flex gap-1">
           <button
             onClick={() => setActiveTab("ai")}
-            className={`px-4 py-2 rounded-md font-orbitron text-xs uppercase tracking-widest transition-all ${
-              activeTab === "ai"
-                ? "bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40"
-                : "text-white/40 hover:text-white/70"
-            }`}
+            className={`px-4 py-2 rounded-md font-orbitron text-xs uppercase tracking-widest transition-all ${activeTab === "ai"
+              ? "bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/40"
+              : "text-white/40 hover:text-white/70"
+              }`}
           >
             ◈ AI Response
           </button>
           <button
             onClick={() => setActiveTab("raw")}
-            className={`px-4 py-2 rounded-md font-orbitron text-xs uppercase tracking-widest transition-all ${
-              activeTab === "raw"
-                ? "bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/40"
-                : "text-white/40 hover:text-white/70"
-            }`}
+            className={`px-4 py-2 rounded-md font-orbitron text-xs uppercase tracking-widest transition-all ${activeTab === "raw"
+              ? "bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/40"
+              : "text-white/40 hover:text-white/70"
+              }`}
           >
             ◈ Raw Prompt
           </button>
         </div>
         <button
           onClick={handleCopy}
-          className={`cyber-button px-4 py-2 rounded-md text-xs flex items-center gap-2 transition-all ${
-            copied ? "border-green-400/50 text-green-400" : ""
-          }`}
+          className={`cyber-button px-4 py-2 rounded-md text-xs flex items-center gap-2 transition-all ${copied ? "border-green-400/50 text-green-400" : ""
+            }`}
         >
-          {copied ? (
-            <>✓ Copied</>
-          ) : (
-            <>⎘ Copy</>
-          )}
+          {copied ? <>✓ Copied</> : <>⎘ Copy</>}
         </button>
       </div>
 
