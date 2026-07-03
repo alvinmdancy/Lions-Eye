@@ -11,17 +11,17 @@ export default function ConfigNotes({ configId, initialNotes }) {
 
   const handleNotesChange = (value) => {
     setNotes(value);
-    
+
     // Clear previous timer
     if (saveTimer) clearTimeout(saveTimer);
-    
+
     // Auto-save after 800ms of inactivity
     const timer = setTimeout(async () => {
       setSaving(true);
       await db.entities.SavedConfig.update(configId, { notes: value });
       setSaving(false);
     }, 800);
-    
+
     setSaveTimer(timer);
   };
 

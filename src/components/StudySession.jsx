@@ -54,6 +54,7 @@ export default function StudySession({ cfg, onClose }) {
   const [copied, setCopied] = useState(false);
   const [notes, setNotes] = useState(cfg.notes || "");
 
+  // Notes autosave is disabled until Supabase DB is wired up
   const handleNotesChange = (val) => {
     setNotes(val);
   };
@@ -136,27 +137,9 @@ export default function StudySession({ cfg, onClose }) {
   };
 
   const handleCopy = () => {
-    const text = view === "ai" ? aiResponse : rawPrompt;
-    if (!text) return;
-
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      });
-    } else {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
-      document.body.appendChild(textarea);
-      textarea.focus();
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+    navigator.clipboard.writeText(view === "ai" ? aiResponse : rawPrompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   useEffect(() => {
@@ -352,3 +335,48 @@ export default function StudySession({ cfg, onClose }) {
                 exit={{ opacity: 0 }}
                 className="overflow-y-auto p-5 md:p-8"
               >
+                <ReactMarkdown
+                  className="prose prose-invert prose-sm max-w-none
+                    prose-headings:font-orbitron prose-headings:uppercase prose-headings:tracking-widest
+                    prose-h1:text-cyber-cyan prose-h2:text-cyber-cyan/80 prose-h3:text-white/70
+                    prose-p:text-white/60 prose-p:leading-relaxed prose-p:font-inter
+                    prose-li:text-white/55 prose-li:font-inter
+                    prose-code:text-cyber-cyan prose-code:bg-cyber-card prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono-cyber prose-code:text-xs
+                    prose-pre:bg-cyber-card prose-pre:border prose-pre:border-cyber-purple/20 prose-pre:rounded-xl
+                    prose-strong:text-white/80
+                    prose-a:text-cyber-cyan prose-a:no-underline hover:prose-a:underline
+                    prose-hr:border-cyber-purple/20"
+                  components={{
+                    blockquote({ children }) {
+                      const text = extractText(children);
+                      const match = text.match(/🔍\s*\*?\*?Image search:\*?\*?\s*[""](.+?)[""]/i)
+                        || text.match(/🔍\s*Image search:\s*[""]?(.+?)[""]?\s*$/i);
+                      if (match) {
+                        return <InlineImageSearch query={match[1]} />;
+                      }
+                      return <blockquote className="border-l-2 border-cyber-cyan/30 pl-4 text-white/50 italic">{children}</blockquote>;
+                    },
+                  }}
+                >
+                  {aiResponse}
+                </ReactMarkdown>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="prompt"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="overflow-y-auto p-5 md:p-8"
+              >
+                <pre className="prompt-output rounded-xl p-6 text-xs leading-relaxed whitespace-pre-wrap">
+                  {rawPrompt}
+                </pre>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
