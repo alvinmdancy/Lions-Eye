@@ -93,7 +93,7 @@ export default function PromptOutput({ rawPrompt, aiResponse, isLoading }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="p-6 max-h-[60vh] overflow-y-auto prompt-output rounded-b-xl"
+              className="p-6 max-h-[80vh] overflow-y-auto prompt-output rounded-b-xl"
             >
               {aiResponse ? (
                 <ReactMarkdown
@@ -121,7 +121,7 @@ export default function PromptOutput({ rawPrompt, aiResponse, isLoading }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="p-6 max-h-[60vh] overflow-y-auto"
+              className="p-6 max-h-[80vh] overflow-y-auto"
             >
               {rawPrompt ? (
                 <pre className="whitespace-pre-wrap text-sm font-mono-cyber text-cyber-cyan/80 leading-relaxed">

@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await supabase.auth.signOut();
+    localStorage.removeItem('lions-eye-ai-session');
   };
 
   const loginWithEmail = async (email, password) => {
