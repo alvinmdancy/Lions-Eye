@@ -1,0 +1,7 @@
+services:
+  lions-eye:
+    build: .
+    container_name: lions-eye
+    restart: unless-stopped
+    ports:
+      - "4173:80"
